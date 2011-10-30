@@ -1,0 +1,124 @@
+<automate>
+    <actions>
+        <action num="0" desc="Read next char" />
+        <action num="1" desc="Start variable accumulation" />
+        <action num="2" desc="Save char (-+)" />
+        <action num="3" desc="Start constant accumulation" />
+        <action num="4" desc="Variable accumulation" />
+        <action num="5" desc="Pop bracket stack" />
+        <action num="6" desc="Push bracket stack" />
+        <action num="7" desc="Constant accumulation" />
+        <action num="8" desc="Save constant" />
+        <action num="9" desc="Save variable" />
+        <action num="10" desc="Save variable and push bracket stack" />
+        <action num="11" desc="Save constant and push bracket stack" />
+        <action num="12" desc="Save constant and end" />
+        <action num="13" desc="Save variable and end" />
+        <action num="14" desc="End" />
+        <action num="15" desc="Save constant and save sign" />
+        <action num="16" desc="Save variable and save sign" />
+    </actions>
+
+    <charsets>
+        <charset name="NAME_CHARS"  chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_" />
+        <charset name="DIGIT"       chars="1234567890" />
+        <charset name="+-"          chars= "+-" />
+        <charset name="*/"          chars="*/" />
+        <charset name="("           chars="(" />
+        <charset name=")"           chars=")" />
+        <charset name="SPACE"       chars=" " />
+        <charset name="POINT"       chars="." />
+    </charsets>
+
+    <states>
+        <state num="0" desc="Initial state">
+            <transitions>
+                <transition charType="NAME_CHARS"   actionType="ACTION" next="2" num="1" />
+                <transition charType="+-"           actionType="ACTION" next="4" num="3" />
+                <transition charType="DIGIT"        actionType="ACTION" next="1" num="3" />
+                <transition charType="("            actionType="ACTION" next="0" num="6" />
+                <transition charType="SPACE"        actionType="ACTION" next="0" num="0" />
+                
+                <transition charType=")"   actionType="ERROR" desc="Empty brackets" />
+                <transition charType="END" actionType="ERROR" desc="Unexpected end of file" />
+            </transitions>
+        </state>
+
+        <state num="1" desc="Constant">
+            <transitions>
+                <transition charType="POINT"        actionType="ACTION" next="7" num="7" />
+                <transition charType=")"            actionType="ACTION" next="6" num="11" />
+                <transition charType="SPACE"        actionType="ACTION" next="5" num="8" />
+                <transition charType="+-"           actionType="ACTION" next="0" num="15" />
+                <transition charType="*/"           actionType="ACTION" next="0" num="15" />
+                <transition charType="DIGIT"        actionType="ACTION" next="1" num="7" />
+                
+                <transition charType="END"          actionType="EXIT" num="12" />
+                
+                <transition charType="NAME_CHARS"   actionType="ERROR" desc="Error in constant" />
+            </transitions>
+        </state>
+
+        <state num="2" desc="Variable">
+            <transitions>
+                <transition charType="SPACE"        actionType="ACTION" next="5" num="9" />
+                <transition charType="+-"           actionType="ACTION" next="0" num="16" />
+                <transition charType="*/"           actionType="ACTION" next="0" num="16" />
+                <transition charType=")"            actionType="ACTION" next="6" num="10" />
+                <transition charType="NAME_CHARS"   actionType="ACTION" next="2" num="4" />
+                <transition charType="DIGIT"        actionType="ACTION" next="2" num="4" />
+                
+                <transition charType="END"          actionType="EXIT" num="13" />
+            </transitions>
+        </state>
+
+        <state num="3" desc="Constant frstateal part">
+            <transitions>
+                <transition charType="DIGIT"        actionType="ACTION" next="3" num="7" />
+                <transition charType=")"            actionType="ACTION" next="6" num="11" />
+                <transition charType="SPACE"        actionType="ACTION" next="5" num="8" />
+                <transition charType="+-"           actionType="ACTION" next="0" num="15" />
+                <transition charType="*/"           actionType="ACTION" next="0" num="15" />
+                
+                <transition charType="END"          actionType="EXIT" num="12" />
+            </transitions>
+        </state>
+
+        <state num="4" desc="Sign before const/var">
+            <transitions>
+                <transition charType="SPACE"        actionType="ACTION" next="4" num="0" />
+                <transition charType="DIGIT"        actionType="ACTION" next="1" num="7" />
+                <transition charType="NAME_CHARS"   actionType="ACTION" next="2" num="7" />
+                <transition charType="("            actionType="ACTION" next="0" num="6" />
+            </transitions>
+        </state>
+
+        <state num="5" desc="End of a block">
+            <transitions>
+                <transition charType=")"            actionType="ACTION" next="6" num="5" />
+                <transition charType="+-"           actionType="ACTION" next="0" num="2" />
+                <transition charType="*/"           actionType="ACTION" next="0" num="2" />
+                <transition charType="SPACE"        actionType="ACTION" next="5" num="0" />
+                
+                <transition charType="END"          actionType="ACTION" num="14" />
+            </transitions>
+        </state>
+
+        <state num="6" desc="Close braket state">
+            <transitions>
+                <transition charType="+-"           actionType="ACTION" next="0" num="2" />
+                <transition charType="*/"           actionType="ACTION" next="0" num="2" />
+                <transition charType="SPACE"        actionType="ACTION" next="6" num="0" />
+                <transition charType=")"            actionType="ACTION" next="6" num="5" />
+                
+                <transition charType="END"          actionType="EXIT" num="14" />
+            </transitions>
+        </state>
+
+        <state num="7" desc="Close braket state">
+            <transitions>
+                <transition charType="DIGIT"        actionType="ACTION" next="3" num="7" />
+            </transitions>
+        </state>
+    </states>
+</automate>
