@@ -1,0 +1,12 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.keypr.android.guestapp",
+    "sha256_cert_fingerprints":
+    [
+      "B8:51:9C:99:EB:F3:50:06:B0:7E:1D:D4:77:D6:23:F9:EC:C3:56:65:79:64:92:44:96:EE:51:52:85:E9:A8:BD",
+      "A3:16:AF:59:F3:6A:59:90:0D:87:42:D7:E6:71:50:44:BA:15:80:D7:04:5D:F8:ED:51:E4:6D:27:36:71:92:C8"
+    ]
+  }
+}]
